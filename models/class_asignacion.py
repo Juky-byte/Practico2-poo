@@ -8,8 +8,8 @@ db = SQLAlchemy(app)
 class Asignacion(db.Model):
     __tablename__ = 'asignaciones'
     id = db.Column(db.Integer, primary_key = True)
-    trabajo_id = db.Column(db.Integer, db.ForeignKey('trabajos.id'), nullable = False)
-    evaluador_id = db.Column(db.Integer, db.ForeignKey('evaluadores.id'), nullable = False)
+    trabajo_id = db.Column(db.Integer, db.ForeignKey('trabajos.id'), nullable = False) #clave foranea
+    evaluador_id = db.Column(db.Integer, db.ForeignKey('evaluadores.id'), nullable = False) #clave foranea
     valoracion = db.Column(db.Integer, nullable = True) 
     comentarios = db.Column(db.Text, nullable = True)
     fecha_evaluacion = db.Column(db.DateTime, nullable = True)
