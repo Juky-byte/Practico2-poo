@@ -1,6 +1,25 @@
-*.pyc
-.env
-.env.backup
-.env.production
-*.sqlite3
+# Entorno virtual
+.venv/
+venv/
 *.txt
+
+# Archivos compilados de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Archivos de entorno
+.env
+
+# Base de datos SQLite
+*.sqlite3
+
+# Archivos de logs
+*.log
+
+# Archivos temporales
+*.tmp
+
+# Configuración de IDEs
+.vscode/
