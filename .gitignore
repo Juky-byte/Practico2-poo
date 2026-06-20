@@ -2,5 +2,5 @@
 .env
 .env.backup
 .env.production
-.sqllite3
+*.sqlite3
 *.txt
