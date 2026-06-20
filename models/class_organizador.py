@@ -1,5 +1,4 @@
 from app import app
-from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
 
@@ -12,3 +11,18 @@ class Organizador(db.Model):
     apellido = db.Column(db.String(50), nullable=False)
     correo = db.Column(db.String(120), unique=True, nullable=False)
     clave = db.Column(db.String(100), nullable=False)
+
+    def get_id(self):
+        return self.id
+    
+    def get_nombre(self):
+        return self.nombre
+    
+    def get_apellido(self):
+        return self.apellido
+    
+    def get_correo(self):
+        return self.correo
+    
+    def get_clave(self):
+        return self.clave
