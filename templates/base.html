@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}ETI{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <h1>Evaluación de Trabajos de Investigación</h1>
+            <nav class="menu">
+                <ul>
+                    <li><a href="{{ url_for('inicio') }}">Inicio</a></li>
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('enviar_trabajo') }}">Enviar Trabajo</a></li>
+                </ul>
+            </nav>
+    </header>
+
+    <!-- Contenido dinamico -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Pie de pagina -->
+    <footer>
+        <p>&copy; Congreso de Ecología - 2026</p>
+    </footer>
+
+</body>
+</html>

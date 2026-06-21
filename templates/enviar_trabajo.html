@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Enviar Trabajo - ETI{% endblock %}
+{% block content %}
+
+<section class="form-page">
+  <h2>Enviar un nuevo trabajo</h2>
+  <form method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="titulo">Título</label>
+      <input type="text" id="titulo" name="titulo" required>
+    </div>
+
+    <div class="form-group">
+      <label for="resumen">Resumen</label>
+      <textarea id="resumen" name="resumen" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="area">Área</label>
+      <select id="area" name="area" required>
+        <option value="">-- Seleccione un área --</option>
+        <option value="Ecología">Ecología</option>
+        <option value="Biología">Biología</option>
+        <option value="Química">Química</option>
+        <option value="Ingeniería">Ingeniería</option>
+        <option value="Informática">Informática</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="autor_nombre">Nombre del autor</label>
+      <input type="text" id="autor_nombre" name="autor_nombre" required>
+    </div>
+
+    <div class="form-group">
+      <label for="autor_apellido">Apellido del autor</label>
+      <input type="text" id="autor_apellido" name="autor_apellido" required>
+    </div>
+
+    <div class="form-group">
+      <label for="autor_correo">Correo del autor</label>
+      <input type="email" id="autor_correo" name="autor_correo" required>
+    </div>
+
+    <div class="form-group">
+      <label for="archivo">Archivo</label>
+      <input type="file" id="archivo" name="archivo" required>
+    </div>
+
+    <button type="submit" class="btn-primary">Enviar</button>
+  </form>
+</section>
+
+{% endblock %}

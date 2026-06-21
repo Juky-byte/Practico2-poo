@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Aviso - ETI{% endblock %}
+{% block content %}
+
+<section class="notice-page">
+  <div class="notice-card">
+    <p class="eyebrow">Aviso</p>
+    <p class="notice-message">{{ message }}</p>
+    <a class="btn-primary" href="{{ url_for('inicio') }}">Volver al inicio</a>
+  </div>
+</section>
+
+{% endblock %}

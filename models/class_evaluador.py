@@ -1,10 +1,9 @@
-from app import app
+from app import db
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
 
-db = SQLAlchemy(app)
-
 class Evaluador(db.Model):
+    # atributos:
     __tablename__ = 'evaluadores'
     id = db.Column(db.Integer, primary_key = True) #clave primaria
     titulo = db.Column(db.String(5))
@@ -16,6 +15,7 @@ class Evaluador(db.Model):
     clave = db.Column(db.String(100), nullable = False)        
     asignaciones =  db.relationship('Asignacion', backref = 'evaluador', lazy = True)
 
+    # consultas:
     def get_id(self):
         return self.id
     

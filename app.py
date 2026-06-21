@@ -1,14 +1,25 @@
-from flask import Flask, request, render_template, session
+import os
+from flask import Flask, request, render_template
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from config import Config
 
-app = Flask(__name__)  #Inicializo la aplicación
-app.config.from_pyfile('config.py')
+# inicializo la aplicacion
+app = Flask(__name__)
+app.config.from_object(Config)
 
-#from gestor import GestorDB
-#gestor = GestorDB()
+# crear carpeta de uploads si no existe
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+# inicializo una instancia de la base de datos que va a ser compartida en los demas modulos
+db = SQLAlchemy(app)
+
+# se crea el gestor de la app
+from controllers.gestor import GestorDB
+gestor = GestorDB()
 
 @app.route('/')
-def menu():
+def inicio():
     return render_template('index.html')
 
 @app.route('/login') #se decora con "/" indicando que va a estar ligada a la ruta raíz
@@ -30,9 +41,36 @@ def bienvenida():
             resultado = render_template('login.html')
     else:
         resultado = render_template('error.html')
+
+    return resultado
+
+@app.route("/enviar_trabajo", methods = ['GET', 'POST'])
+def enviar_trabajo():
+    resultado = ""
+    if request.method == 'POST':
+        titulo = request.form['titulo']
+        resumen = request.form['resumen']
+        area = request.form['area']
+        autor_nombre = request.form['autor_nombre']
+        autor_apellido = request.form['autor_apellido']
+        autor_correo = request.form['autor_correo']
+        archivo = request.files['archivo']
+
+        # guardar archivo en carpeta uploads
+        if archivo:
+            ruta_archivo = os.path.join(app.config['UPLOAD_FOLDER'], archivo.filename)
+            archivo.save(ruta_archivo)
+            
+        # guardar usando el gestor
+        id = gestor.agregar_trabajo(titulo, resumen, area, autor_nombre, autor_apellido, autor_correo, archivo.filename)
+        resultado = render_template('aviso.html', message= f"Trabajo enviado correctamente. ID asignado: {id}")
+
+    else: # si entra por GET, mouestra el formulario
+        resultado = render_template('enviar_trabajo.html')
+
     return resultado
 
 if __name__ == '__main__':
-    with app.app_context(): #le digo a python que actúe como si la app estuviera corriendo(realmente no lo hace)
-        #gestor.crearDB()
+    with app.app_context(): # le digo a python que actúe como si la app estuviera corriendo(realmente no lo hace)
+        gestor.crearDB()
         app.run(debug = True,port = 5000) #Se ejecuta la aplicación, "debug" por defecto es False, puerto 5000 (se puede modificar)

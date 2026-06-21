@@ -1,10 +1,9 @@
-from app import app
+from app import db
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
 
-db = SQLAlchemy(app)
-
 class Organizador(db.Model):
+    # atributos:
     __tablename__ = 'organizadores'
     id = db.Column(db.Integer, primary_key = True)  #clave primaria    
     nombre = db.Column(db.String(50), nullable = False)
@@ -12,6 +11,7 @@ class Organizador(db.Model):
     correo = db.Column(db.String(120), unique = True, nullable = False)
     clave = db.Column(db.String(100), nullable = False)
 
+    # consultas:
     def get_id(self):
         return self.id
     

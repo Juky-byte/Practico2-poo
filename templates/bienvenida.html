@@ -1,13 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<body>
-    {% if hora < 12 %}
-        <h1> Buenos días {{ datos.nombre }} </h1>
-    {% elif hora < 21 %}
-        <h1> Buenas tardes {{ datos.nombre }} </h1>
-        {% else %}
-        <h1> Buenas noches {{ datos.nombre }} </h1>
+{% extends "base.html" %}
+{% block title %}Bienvenida - ETI{% endblock %}
+{% block content %}
+<section class="bienvenida">
+    <h2>Bienvenido, {{ datos['nombre'] }}</h2>
+    <p>Has iniciado sesión como <strong>{{ datos['rol'] }}</strong>.</p>
+    <p>Tu correo registrado es: {{ datos['email'] }}</p>
+    <p>Hora de ingreso: {{ hora }}:00 hs</p>
+
+    {% if datos['rol'] == 'evaluador' %}
+        <a class="btn-primary" href="{{ url_for('bandeja') }}">Ir a la bandeja de evaluación</a>
+    {% elif datos['rol'] == 'organizador' %}
+        <a class="btn-primary" href="{{ url_for('enviar_trabajo') }}">Gestionar trabajos</a>
     {% endif %}
-        <h2> Recibirás las notificaciones en el correo {{ datos.email }} </h2>
-</body>
-</html>
+</section>
+{% endblock %}
