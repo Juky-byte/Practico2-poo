@@ -1,19 +1,15 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset = "UTF-8">
-        <title>Menu de Navegacion con Listas</title>
-        <link rel = "stylesheet" type = "text/css" href = "static/css/estilos.css"> <!-- Diapositiva 35 hay otro metodo-->
-    </head>
-    <body>
-        <ul class = "menu">
-            <li><a href = "/login">Inicio de Sesion</a></li>
-            <li><a href = "#">Productos</a></li>
-            <li><a href = "#">Servicios</a></li>
-            <li><a href = "#">Acerca de</a></li>
-            <li><a href = "#">Contacto</a></li>
-        </ul>
-        <h1>  Plataforma de Recepción y Evaluación Científica <h1>
-        <h3> Bienvenido al sistema de Congreso. Seleccione su perfil de ingreso en la barra superior para continuar </h3>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Inicio - ETI{% endblock %}
+
+{% block content %}
+<section class="inicio">
+    <h2>Bienvenido al sistema de evaluación</h2>
+    <p>Este sistema permite enviar trabajos de investigación, consultar su estado y gestionar la evaluación por parte de los revisores.</p>
+    
+    <div class="acciones">
+        <a class="btn-primary" href="{{ url_for('enviar_trabajo') }}">Enviar un nuevo trabajo</a>
+        <a class="btn-secondary" href="{{ url_for('login') }}">Iniciar sesión</a>
+    </div>
+</section>
+{% endblock %}

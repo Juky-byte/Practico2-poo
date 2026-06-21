@@ -1,11 +1,10 @@
-from app import app
+from app import db
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
 
-db = SQLAlchemy(app)
-
 class Trabajo(db.Model):
+    # atributos:
     __tablename__ = 'trabajos'
     id = db.Column(db.Integer, primary_key = True) #clave primaria
     titulo = db.Column(db.String(200), nullable = False)
@@ -19,6 +18,7 @@ class Trabajo(db.Model):
     archivo_nombre = db.Column(db.String(255), nullable = True)        
     asignaciones = db.relationship('Asignacion', backref = 'trabajo', lazy = True)
 
+    # consultas:
     def get_id(self):
         return self.id
     

@@ -1,11 +1,10 @@
-from app import app
+from app import db
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
 
-db = SQLAlchemy(app)
-
 class Asignacion(db.Model):
+    # atributos:
     __tablename__ = 'asignaciones'
     id = db.Column(db.Integer, primary_key = True)
     trabajo_id = db.Column(db.Integer, db.ForeignKey('trabajos.id'), nullable = False) #clave foranea
@@ -14,6 +13,7 @@ class Asignacion(db.Model):
     comentarios = db.Column(db.Text, nullable = True)
     fecha_evaluacion = db.Column(db.DateTime, nullable = True)
 
+    # consultas:
     def get_id(self):
         return self.id
     
