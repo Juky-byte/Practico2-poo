@@ -6,11 +6,11 @@ db = SQLAlchemy(app)
 
 class Organizador(db.Model):
     __tablename__ = 'organizadores'
-    id = db.Column(db.Integer, primary_key=True)    
-    nombre = db.Column(db.String(50), nullable=False)
-    apellido = db.Column(db.String(50), nullable=False)
-    correo = db.Column(db.String(120), unique=True, nullable=False)
-    clave = db.Column(db.String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key = True)  #clave primaria    
+    nombre = db.Column(db.String(50), nullable = False)
+    apellido = db.Column(db.String(50), nullable = False)
+    correo = db.Column(db.String(120), unique = True, nullable = False)
+    clave = db.Column(db.String(100), nullable = False)
 
     def get_id(self):
         return self.id
@@ -26,3 +26,6 @@ class Organizador(db.Model):
     
     def get_clave(self):
         return self.clave
+    
+    def verifica_clave(self,contra):
+        return check_password_hash(self.clave, contra)
