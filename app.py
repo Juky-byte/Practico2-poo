@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from config import Config
@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 # crear carpeta de uploads si no existe
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok = True)
 
 # inicializo una instancia de la base de datos que va a ser compartida en los demas modulos
 db = SQLAlchemy(app)
@@ -53,7 +53,7 @@ def enviar_trabajo():
         area = request.form['area']
         autor_nombre = request.form['autor_nombre']
         autor_apellido = request.form['autor_apellido']
-        autor_correo = request.form['autor_correo']
+        autor_email = request.form['autor_email']
         archivo = request.files['archivo']
 
         # guardar archivo en carpeta uploads
@@ -62,12 +62,35 @@ def enviar_trabajo():
             archivo.save(ruta_archivo)
             
         # guardar usando el gestor
-        id = gestor.agregar_trabajo(titulo, resumen, area, autor_nombre, autor_apellido, autor_correo, archivo.filename)
-        resultado = render_template('aviso.html', message= f"Trabajo enviado correctamente. ID asignado: {id}")
+        id = gestor.agregar_trabajo(titulo, resumen, area, autor_nombre, autor_apellido, autor_email, archivo.filename)
+        resultado = render_template('aviso.html', message = f"Trabajo enviado correctamente. ID asignado: {id}")
 
-    else: # si entra por GET, mouestra el formulario
+    else: # si entra por GET, muestra el formulario
         resultado = render_template('enviar_trabajo.html')
 
+    return resultado
+
+@app.route("/consultar_trabajo",methods = ['GET', 'POST'])
+def consultar_trabajo():
+    resultado = ''
+    if request.method == 'POST':
+        id_trabajo = request.form.get('id_trabajo')
+        correo = request.form.get('autor_email')
+        trabajo = gestor.get_trabajo(id_trabajo,correo)
+        if trabajo:
+            resultado = render_template(
+                "consultar_trabajo.html",
+                trabajo_1 = trabajo,
+                mensaje ='Codigo es:'
+            )
+        else:
+            resultado = render_template(
+                "consultar_trabajo.html",
+                trabajo_1 = None,
+                mensaje = "No se encontró un trabajo con esos datos."
+            )
+    else:
+        resultado = render_template("consultar_trabajo.html", trabajo_1 = None, mensaje = None)
     return resultado
 
 if __name__ == '__main__':

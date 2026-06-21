@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Consultar Trabajo - ETI{% endblock %}
+{% block content %}
+
+<section class = "form-page">
+  <h2>Consultar estado de un trabajo</h2>
+  <form method = "POST">
+    <div class = "form-group">
+      <label for = "id_trabajo">Número de trabajo</label>
+      <input type = "text" id = "id_trabajo" name = "id_trabajo" required>
+    </div>
+
+    <div class = "form-group">
+      <label for = "autor_correo">Correo del autor</label>
+      <input type = "email" id = "autor_email" name = "autor_email" required>
+    </div>
+
+    <button type = "submit" class = "btn-primary">Consultar Estado</button>
+  </form>
+
+  {% if trabajo_1 %}
+    <div class="resultado">
+      <h3>Trabajo encontrado</h3>
+      <p><strong>Título:</strong> {{ trabajo_1.titulo }}</p>
+      <p><strong>Autor:</strong> {{ trabajo_1.autor_nombre }} {{ trabajo_1.autor_apellido }}</p>
+      <p><strong>Email:</strong> {{ trabajo_1.autor_email }}</p>
+      <p><strong>Estado:</strong> {{ trabajo_1.estado }}</p>
+    </div>
+  {% elif mensaje %}
+    <div class="alerta">
+      <p>{{ mensaje }}</p>
+    </div>
+  {% endif %}
+</section>
+
+{% endblock %}
