@@ -41,7 +41,6 @@ def bienvenida():
             resultado = render_template('login.html')
     else:
         resultado = render_template('error.html')
-
     return resultado
 
 @app.route("/enviar_trabajo", methods = ['GET', 'POST'])
@@ -55,19 +54,15 @@ def enviar_trabajo():
         autor_apellido = request.form['autor_apellido']
         autor_email = request.form['autor_email']
         archivo = request.files['archivo']
-
         # guardar archivo en carpeta uploads
         if archivo:
             ruta_archivo = os.path.join(app.config['UPLOAD_FOLDER'], archivo.filename)
             archivo.save(ruta_archivo)
-            
         # guardar usando el gestor
         id = gestor.agregar_trabajo(titulo, resumen, area, autor_nombre, autor_apellido, autor_email, archivo.filename)
         resultado = render_template('aviso.html', message = f"Trabajo enviado correctamente. ID asignado: {id}")
-
     else: # si entra por GET, muestra el formulario
         resultado = render_template('enviar_trabajo.html')
-
     return resultado
 
 @app.route("/consultar_trabajo",methods = ['GET', 'POST'])
