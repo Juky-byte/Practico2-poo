@@ -3,13 +3,22 @@
 {% block title %}Inicio - ETI{% endblock %}
 
 {% block content %}
-<section class="inicio">
+<section class="inicio" style="text-align: center;">
     <h2>Bienvenido al sistema de evaluación</h2>
     <p>Este sistema permite enviar trabajos de investigación, consultar su estado y gestionar la evaluación por parte de los revisores.</p>
     
-    <div class="acciones">
-        <a class="btn-primary" href="{{ url_for('enviar_trabajo') }}">Enviar un nuevo trabajo</a>
-        <a class="btn-secondary" href="{{ url_for('login') }}">Iniciar sesión</a>
+    <div class="acciones" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 20px; width: 100%;">
+        {% if session.get('rol') == 'organizador' %}
+            <a class="btn-primary" href="{{ url_for('asignar_trabajos') }}" style="background-color: #ffb07c; color: #222; font-weight: bold; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">
+                Asignar Trabajos Automáticamente
+            </a>
+        {% endif %}
+
+        {% if session.get('rol') == 'evaluador' %}
+            <a class="btn-primary" href="{{ url_for('bandeja') }}">
+                Evaluar Trabajos Asignados
+            </a>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

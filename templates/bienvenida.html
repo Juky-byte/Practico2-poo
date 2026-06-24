@@ -10,7 +10,7 @@
     {% if datos['rol'] == 'evaluador' %}
         <a class="btn-primary" href="{{ url_for('bandeja') }}">Ir a la bandeja de evaluación</a>
     {% elif datos['rol'] == 'organizador' %}
-        <a class="btn-primary" href="{{ url_for('enviar_trabajo') }}">Gestionar trabajos</a>
+        <a class="btn-primary" href="{{ url_for('asignar_trabajos') }}">Gestionar trabajos</a>
     {% endif %}
 </section>
 {% endblock %}

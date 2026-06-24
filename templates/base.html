@@ -4,31 +4,96 @@
     <meta charset="UTF-8">
     <title>{% block title %}ETI{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <style>
+        /* Ajustes de control para evitar superposiciones en el menú */
+        header .menu ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap; /* Evita que los textos colisionen en pantallas chicas */
+        }
+        header .menu ul li {
+            margin: 0 15px;
+        }
+
+        /* Contenedor flotante fijo en la esquina inferior derecha */
+        .widget-rol-flotante {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #3b4664;
+            color: #ffffff;
+            padding: 10px 15px;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            font-family: Arial, sans-serif;
+            font-size: 0.9em;
+            z-index: 1000;
+            border: 1px solid #ffb07c;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Encabezado -->
     <header>
         <h1>Evaluación de Trabajos de Investigación</h1>
-            <nav class="menu">
-                <ul>
-                    <li><a href="{{ url_for('inicio') }}">Inicio</a></li>
-                    <li><a href="{{ url_for('login') }}">Iniciar Sesion</a></li>
-                    <li><a href="{{ url_for('enviar_trabajo') }}">Enviar Trabajo</a></li>
-                    <li><a href="{{ url_for('consultar_trabajo') }}">Consultar Trabajo</a></li>
-                </ul>
-            </nav>
+        <nav class="menu">
+            <ul>
+                <li><a href="{{ url_for('inicio') }}">Inicio</a></li>
+                <li><a href="{{ url_for('enviar_trabajo') }}">Enviar Trabajo</a></li>
+                <li><a href="{{ url_for('consultar_trabajo') }}">Consultar Trabajo</a></li>
+                
+                {% if session.get('rol') %}
+                    <li><a href="{{ url_for('logout') }}" style="color: #ff6b6b; font-weight: bold;">Cerrar Sesión</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Iniciar Sesión</a></li>
+                {% endif %}
+            </ul>
+        </nav>
     </header>
 
-    <!-- Contenido dinamico -->
     <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages" style="max-width: 800px; margin: 15px auto; padding: 0 10px;">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" style="padding: 12px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; margin-bottom: 10px; text-align: center;">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Pie de pagina -->
+    {% if session.get('rol') %}
+        <div class="widget-rol-flotante">
+            Conectado como: <strong style="color: #ffb07c; text-transform: uppercase;">{{ session.get('rol') }}</strong>
+            <br>
+            <span style="font-size: 0.85em; color: #ccc;">Usuario: {{ session.get('nombre') }}</span>
+        </div>
+    {% endif %}
+
     <footer>
         <p>&copy; Congreso de Ecología - 2026</p>
     </footer>
-
+    {% if session.get('rol') %}
+    <div class="cartel-sesion">
+        <p>Conectado como: <strong>{{ session.get('rol') | upper }}</strong></p>
+        <span>
+            Usuario: 
+            {% if session.get('nombre') %}
+                {{ session.get('nombre') }} {{ session.get('apellido') }}
+            {% else %}
+                Usuario Registrado
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
 </body>
 </html>
