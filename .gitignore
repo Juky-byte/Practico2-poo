@@ -24,3 +24,6 @@ __pycache__/
 .vscode/
 
 .gitattributes
+
+# Carpeta de archivos
+uploads

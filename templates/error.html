@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset = "UTF-8">
-        <title>Error</title>
-        <link rel = "stylesheet" href = "static/css/estilos.css">
-    </head>
-    <body>
-        <div class="error-container">
-            <h2>¡Error!</h2>
-            <p>{{ error }}</p>
-            <a href = "/">Volver al inicio</a>
-        </div>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error en el Sistema</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <h2>¡Ups! Algo salió mal</h2>
+        <p>{{ error if error else 'Ha ocurrido un error inesperado en el sistema.' }}</p>
+        <a href="{{ url_for('inicio') }}" class="btn-volver">Volver al inicio</a>
+    </div>
+</body>
 </html>
