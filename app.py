@@ -1,9 +1,8 @@
 import os
-from flask import Flask, request, render_template, session
+from flask import Flask, request, render_template, session, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from config import Config
-
 # inicializo la aplicacion
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -17,6 +16,8 @@ db = SQLAlchemy(app)
 # se crea el gestor de la app
 from controllers.gestor import GestorDB
 gestor = GestorDB()
+from models.class_evaluador import Evaluador
+from models.class_organizador import Organizador
 
 @app.route('/')
 def inicio():
@@ -24,24 +25,24 @@ def inicio():
 
 @app.route('/login') #se decora con "/" indicando que va a estar ligada a la ruta raíz
 def login(): #Esto es una vista
-    #return "Todavía no hay nada..."
-    return render_template('login.html')  #va la plantilla que va estar ubicada en Html
+    return render_template('login.html')
 
-@app.route("/bienvenida", methods = ['POST', 'GET'])
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash("Has cerrado sesión correctamente.", "info")
+    return redirect(url_for('login'))
+
+@app.route('/bienvenida', methods=['POST'])
 def bienvenida():
-    resultado = ""
-    if request.method == 'POST':
-        if request.form['nombre'] and request.form['email'] and request.form['password'] and request.form['rol']:
-            datosf = request.form
-            if request.form['rol'] == 'evaluador':
-                resultado = render_template('bienvenida.html', datos = datosf, hora = datetime.now().hour) #CAMBIAR A LO QUE DEBE A HACER
-            elif request.form['rol'] == 'organizador':
-                resultado = render_template('bienvenida.html', datos = datosf, hora = datetime.now().hour) #CAMBIAR A LO QUE DEBE A HACER
-        else:
-            resultado = render_template('login.html')
-    else:
-        resultado = render_template('error.html')
-    return resultado
+    nombre = request.form.get('nombre')
+    email = request.form.get('email')
+    rol_elegido = request.form.get('rol')
+    session['nombre'] = nombre
+    session['email'] = email
+    session['rol'] = rol_elegido
+    flash(f"¡Inicio de sesión exitoso como {rol_elegido.capitalize()}!", "success")
+    return redirect(url_for('inicio')) # Redirige al inicio o home
 
 @app.route("/enviar_trabajo", methods = ['GET', 'POST'])
 def enviar_trabajo():
@@ -87,6 +88,12 @@ def consultar_trabajo():
     else:
         resultado = render_template("consultar_trabajo.html", trabajo_1 = None, mensaje = None)
     return resultado
+
+@app.route("/asignar_trabajos")
+def asignar_trabajos():
+    asignaciones = gestor.asignar_trabajos()
+    retorno = render_template('asignar_trabajo.html', asignaciones = asignaciones)
+    return retorno
 
 if __name__ == '__main__':
     with app.app_context(): # le digo a python que actúe como si la app estuviera corriendo(realmente no lo hace)

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Asignación de Trabajos - ETI{% endblock %}
+
+{% block content %}
+<section class="asignacion-page" style="max-width: 750px; margin: 40px auto; padding: 25px; text-align: center; background-color: #3b4664; border-radius: 8px; border: 1px solid #ffb07c; color: white;">
+    
+    <div class="icon-success" style="font-size: 3em; color: #ffb07c; margin-bottom: 15px;">
+        ⚙️
+    </div>
+    
+    <h2 style="color: #ffb07c; margin-bottom: 10px;">Proceso de Asignación Finalizado</h2>
+    
+    <p style="color: #ccc; line-height: 1.6; margin-bottom: 25px;">
+        La aplicación ejecutó con éxito el algoritmo de asignación automática de evaluadores para los trabajos en estado <strong>Pendiente</strong>.
+    </p>
+
+    <div style="margin-bottom: 30px; text-align: left;">
+        <h3 style="color: #ffb07c; border-bottom: 1px solid #4a577d; padding-bottom: 8px; margin-bottom: 15px;">Resumen de Emparejamientos Realizados</h3>
+        
+        {% if asignaciones %}
+            <table style="width: 100%; border-collapse: collapse; background-color: #2c3550; border-radius: 6px; overflow: hidden;">
+                <thead>
+                    <tr style="background-color: #4a577d; color: #ffb07c; text-align: left;">
+                        <th style="padding: 12px;">Trabajo de Investigación</th>
+                        <th style="padding: 12px;">Evaluador Asignado</th>
+                        <th style="padding: 12px; text-align: center;">Área</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for asig in asignaciones %}
+                        <tr style="border-bottom: 1px solid #3b4664;">
+                            <td style="padding: 12px; color: #fff;">{{ asig.trabajo_titulo }}</td>
+                            <td style="padding: 12px; color: #e0e0e0;">{{ asig.evaluador_nombre }}</td>
+                            <td style="padding: 12px; text-align: center; color: #ffb07c;"><strong>{{ asig.area }}</strong></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="color: #aaa; font-style: italic; text-align: center; padding: 15px; background-color: #2c3550; border-radius: 6px;">
+                No se encontraron nuevos trabajos pendientes viables o los evaluadores del área ya alcanzaron su límite máximo de cupos.
+            </p>
+        {% endif %}
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #4a577d; margin-bottom: 25px;">
+
+    <div style="display: flex; justify-content: center; gap: 15px;">
+        <a href="{{ url_for('inicio') }}" class="btn-primary" style="display: inline-block; padding: 10px 20px; background-color: #ffb07c; color: #222; text-decoration: none; font-weight: bold; border-radius: 4px;">
+            Volver al Inicio
+        </a>
+    </div>
+
+</section>
+{% endblock %}

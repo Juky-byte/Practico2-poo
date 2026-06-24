@@ -1,7 +1,6 @@
 # Entorno virtual
 .venv/
 venv/
-*.txt
 
 # Archivos compilados de Python
 __pycache__/
@@ -23,3 +22,5 @@ __pycache__/
 
 # Configuración de IDEs
 .vscode/
+
+.gitattributes
