@@ -141,3 +141,93 @@ footer {
     color: #a0aec0; /* Gris claro para el nombre de usuario */
     margin-top: 2px;
 }
+/* Ajustes de control para evitar superposiciones en el menú */
+header .menu ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap; /* Evita que los textos colisionen en pantallas chicas */
+}
+header .menu ul li {
+    margin: 0 15px;
+}
+
+/* Contenedor flotante fijo en la esquina inferior derecha */
+.widget-rol-flotante {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #3b4664;
+    color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    font-family: Arial, sans-serif;
+    font-size: 0.9em;
+    z-index: 1000;
+    border: 1px solid #ffb07c;
+}
+
+/* --- ESTILOS PARA LA PÁGINA DE ERROR --- */
+
+.error-container {
+    text-align: center;
+    background-color: #2e384d; /* Azul oscuro consistente con el proyecto */
+    padding: 40px 50px;
+    border-radius: 8px;
+    border: 1px solid #ffb07c; /* Detalle naranja de advertencia */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    max-width: 450px;
+    width: 90%;
+    /* Centrado absoluto en pantalla en caso de que su padre no use Flexbox */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.error-icon {
+    font-size: 64px;
+    color: #ffb07c;
+    margin-bottom: 15px;
+}
+
+.error-container h2 {
+    margin: 0 0 10px 0;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}
+
+.error-container p {
+    color: #a0aec0; /* Gris claro secundario */
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0 0 30px 0;
+    word-wrap: break-word;
+}
+
+.btn-volver {
+    display: inline-block;
+    background-color: #ffb07c;
+    color: #1a202c; /* Texto oscuro para buen contraste */
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 15px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-volver:hover {
+    background-color: #e09b67;
+    transform: translateY(-1px);
+}
+
+.btn-volver:active {
+    transform: translateY(0);
+}
