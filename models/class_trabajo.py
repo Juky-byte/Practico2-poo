@@ -43,6 +43,9 @@ class Trabajo(db.Model):
     def get_estado(self):
         return self.estado
     
+    def set_estado(self,otro):
+        self.estado = otro
+    
     def get_fecha_envio(self):
         return self.fecha_envio.strftime("%Y-%m-%d %H:%M:%S")
     

@@ -3,6 +3,7 @@ from flask import Flask, request, render_template, session, flash, redirect, url
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from config import Config
+from werkzeug.security import check_password_hash
 # inicializo la aplicacion
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -18,14 +19,58 @@ from controllers.gestor import GestorDB
 gestor = GestorDB()
 from models.class_evaluador import Evaluador
 from models.class_organizador import Organizador
+from models.class_asignacion import Asignacion
+from models.class_trabajo import Trabajo
 
 @app.route('/')
 def inicio():
     return render_template('index.html')
 
-@app.route('/login') #se decora con "/" indicando que va a estar ligada a la ruta raíz
-def login(): #Esto es una vista
-    return render_template('login.html')
+@app.route('/login', methods = ['GET', 'POST'])
+def login(): # Esto es una vista
+    print(f"\n[MÉTODO DETECTADO]: Entró a la vista login por el método {request.method}")
+    if request.method == 'POST':
+        correo_ingresado = request.form.get('correo')
+        clave_ingresada = request.form.get('clave')
+        evaluador = Evaluador.query.filter_by(correo=correo_ingresado).first()
+        organizador = Organizador.query.filter_by(correo=correo_ingresado).first()
+        # --- 🔍 AGREGA ESTO ACÁ PARA INSPECCIONAR A CARLOS ---
+        if evaluador:
+            print("\n=== 🕵️ INSPECCIONANDO LAS COLUMNAS DE EVALUADOR ===")
+            # Esto imprimirá en la consola un diccionario con los nombres de campos reales en la DB
+            print("Campos reales de este objeto:", evaluador.__dict__)
+            print("==================================================\n")
+        # --- 🔍 PRINT DE DIAGNÓSTICO CRÍTICO ---
+        print("\n=== ANALIZANDO DATOS INGRESADOS ===")
+        print(f"Texto escrito en formulario - Correo: '{correo_ingresado}' | Clave: '{clave_ingresada}'")
+        print(f"¿Se encontró al evaluador en la DB?: {'SÍ' if evaluador else 'NO'}")
+        print("===================================\n")
+        
+        if evaluador and check_password_hash(evaluador.get_clave(), clave_ingresada):
+            session['rol'] = 'evaluador'
+            session['correo'] = evaluador.get_correo()
+            session['nombre'] = evaluador.get_nombre()
+            session['apellido'] = evaluador.get_apellido()
+            session['id'] = evaluador.id
+            print("\n=== ¡LOGIN DE EVALUADOR DETECTADO! ===")
+            print("Guardando en sesión el ID ->", evaluador.id)
+            print("======================================\n")
+            flash(f'¡Bienvenido {evaluador.get_nombre()}!', 'exito')
+            resultado = redirect(url_for('bandeja'))
+        elif organizador and check_password_hash(organizador.get_clave(), clave_ingresada):
+            session['rol'] = 'organizador'
+            session['correo'] = organizador.get_correo()
+            session['nombre'] = organizador.get_nombre()
+            session['apellido'] = organizador.get_apellido()
+            session['id'] = organizador.id
+            flash(f'¡Bienvenido {organizador.get_nombre()}!', 'exito')
+            resultado = redirect(url_for('asignar_trabajos'))   
+        else:
+            flash('Correo o contraseña incorrectos', 'error')
+            resultado = redirect(url_for('login'))
+    else:
+        resultado = render_template('login.html')  
+    return resultado
 
 @app.route('/logout')
 def logout():
@@ -33,17 +78,28 @@ def logout():
     flash("Has cerrado sesión correctamente.", "info")
     return redirect(url_for('login'))
 
-@app.route('/bienvenida', methods=['POST'])
-def bienvenida():
-    nombre = request.form.get('nombre')
-    email = request.form.get('email')
-    rol_elegido = request.form.get('rol')
-    session['nombre'] = nombre
-    session['email'] = email
-    session['rol'] = rol_elegido
-    flash(f"¡Inicio de sesión exitoso como {rol_elegido.capitalize()}!", "success")
-    return redirect(url_for('inicio')) # Redirige al inicio o home
+@app.route('/limpiar')
+def limpiar_sesion():
+    session.clear()  # Borra el rol y el ID viejo por completo
+    print("\n=== ¡SESIÓN BORRADA EN EL SERVIDOR! ===\n")
+    return "Sesión limpia. Ahora ve a /login e intenta ingresar de nuevo."
 
+@app.route('/bienvenida', methods = ['POST'])
+def bienvenida():
+    if request.method == 'POST':
+        nombre = request.form.get('nombre')
+        email = request.form.get('email')
+        rol_elegido = request.form.get('rol')
+        session['nombre'] = nombre
+        session['email'] = email
+        session['rol'] = rol_elegido
+        flash(f"¡Inicio de sesión exitoso como {rol_elegido.capitalize()}!", "success")
+        retorno = redirect(url_for('inicio'))
+    else:
+        retorno = render_template('error.html')
+    return retorno # Redirige al inicio o home
+
+#Funcionalidad 1
 @app.route("/enviar_trabajo", methods = ['GET', 'POST'])
 def enviar_trabajo():
     resultado = ""
@@ -60,12 +116,13 @@ def enviar_trabajo():
             ruta_archivo = os.path.join(app.config['UPLOAD_FOLDER'], archivo.filename)
             archivo.save(ruta_archivo)
         # guardar usando el gestor
-        id = gestor.agregar_trabajo(titulo, resumen, area, autor_nombre, autor_apellido, autor_email, archivo.filename)
+        id = gestor.crear_trabajo(titulo, resumen, area, autor_nombre, autor_apellido, autor_email, archivo.filename)
         resultado = render_template('aviso.html', message = f"Trabajo enviado correctamente. ID asignado: {id}")
     else: # si entra por GET, muestra el formulario
         resultado = render_template('enviar_trabajo.html')
     return resultado
 
+# Funcionalidad 2
 @app.route("/consultar_trabajo",methods = ['GET', 'POST'])
 def consultar_trabajo():
     resultado = ''
@@ -89,11 +146,33 @@ def consultar_trabajo():
         resultado = render_template("consultar_trabajo.html", trabajo_1 = None, mensaje = None)
     return resultado
 
+# Funcionalidad 3
 @app.route("/asignar_trabajos")
 def asignar_trabajos():
     asignaciones = gestor.asignar_trabajos()
     retorno = render_template('asignar_trabajo.html', asignaciones = asignaciones)
     return retorno
+
+# Funcionalidad 5
+@app.route('/bandeja')
+def bandeja():
+    if session.get('rol') == 'Organizador':
+        resultado = render_template('error.html')
+    else:
+        # --- 🧪 METE ESTOS PRINTS DE DIAGNÓSTICO ---
+        print("\n=== VERIFICANDO DATOS DEL EVALUADOR ===")
+        print("1. ID guardado en sesión:", session.get('id'))
+        print("2. Rol guardado en sesión:", session.get('rol'))
+        print("========================================\n") 
+        
+        pendientes = gestor.Pendientes(session.get('id'))
+        evaluadas_lista = gestor.Evaluadas(session.get('id'))
+        
+        print(f"-> Cantidad devuelta por el gestor: {len(pendientes)} pendientes")
+        
+        # 💡 CORREGIDO: Pasamos 'evaluadas=evaluadas_lista' para que coincida con tu HTML
+        resultado = render_template('bandeja.html', pendientes=pendientes, evaluadas=evaluadas_lista)
+    return resultado
 
 if __name__ == '__main__':
     with app.app_context(): # le digo a python que actúe como si la app estuviera corriendo(realmente no lo hace)

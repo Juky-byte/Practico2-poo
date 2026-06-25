@@ -84,3 +84,25 @@ class GestorDB:
         db.session.commit()
         print(f"\n=== [FIN DIAGNÓSTICO] Asignaciones totales creadas en este clic: {len(detalles_asignaciones)} ===\n")
         return detalles_asignaciones
+
+    def Evaluadas(self, evaluador_id):
+        asignaciones = Asignacion.query.filter_by(evaluador_id=evaluador_id).all()
+        evaluadas = []
+        i = 0
+        while i < len(asignaciones):
+            asignacion = asignaciones[i]
+            if asignacion.fue_evaluada():
+                evaluadas.append(asignacion)
+            i += 1
+        return evaluadas
+    
+    def Pendientes(self, evaluador_id):
+        asignaciones = Asignacion.query.filter_by(evaluador_id=evaluador_id).all()
+        pendientes = []
+        i = 0
+        while i < len(asignaciones):
+            asignacion = asignaciones[i]
+            if not asignacion.fue_evaluada():
+                pendientes.append(asignacion)
+            i += 1
+        return pendientes
