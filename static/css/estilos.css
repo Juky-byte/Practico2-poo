@@ -1,6 +1,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap');
 
+/* --- BASE --- */
 body {
     font-family: 'Raleway', Arial, sans-serif;
     background: #2d3250;
@@ -9,7 +10,6 @@ body {
     padding: 0;
     text-align: center;
 }
-
 
 header {
     background: #424769;
@@ -22,17 +22,22 @@ header h1 {
     color: #f9b17a;
 }
 
-
-.menu {
-    list-style: none;
-    padding: 0;
-    margin: 20px auto;
-    max-width: 1000px;
+footer {
+    background: #424769;
+    padding: 15px;
+    margin-top: 40px;
+    color: #ffffff;
 }
 
-.menu li {
-    display: inline-block;
-    margin: 0 10px;
+/* --- MENÚ --- */
+.menu ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 0;
+    margin: 20px auto;
+    flex-wrap: wrap;
 }
 
 .menu li a {
@@ -48,6 +53,29 @@ header h1 {
     color: #2d3250;
 }
 
+.logout {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+/* --- BOTONES --- */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.btn-primary { background: #f9b17a; color: #2d3250; }
+.btn-primary:hover { background: #ffffff; }
+
+.btn-asignar { background-color: #ffb07c; color: #222; }
+.btn-bandeja { background-color: #4a90e2; color: #fff; }
+.btn-volver { background-color: #ffb07c; color: #222; }
+
+/* --- FORMULARIOS --- */
 .form-page {
     background: #424769;
     padding: 30px;
@@ -88,101 +116,74 @@ header h1 {
     color: #2d3250;
 }
 
-.btn-primary {
-    background: #f9b17a;
-    color: #2d3250;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background 0.3s ease;
+/* --- FLASH MESSAGES --- */
+.flash-messages {
+    max-width: 800px;
+    margin: 15px auto;
+    padding: 0 10px;
 }
 
-.btn-primary:hover {
-    background: #ffffff;
-    color: #2d3250;
+.alert {
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
-footer {
-    background: #424769;
-    padding: 15px;
-    margin-top: 40px;
-    color: #ffffff;
+.alert-exito {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* --- WIDGETS DE SESIÓN --- */
+.widget-rol-flotante {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: #3b4664;
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    border: 1px solid #ffb07c;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.widget-rol-flotante .rol {
+    color: #ffb07c;
+    text-transform: uppercase;
+}
+
+.widget-rol-flotante .usuario {
+    font-size: 0.85em;
+    color: #ccc;
 }
 
 .cartel-sesion {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #2e384d; /* Azul oscuro del contenedor */
-    color: #ffffff;
-    padding: 12px 20px;
+    margin-top: 20px;
+    text-align: center;
+    background: #eee;
+    padding: 10px;
     border-radius: 6px;
-    border: 1px solid #ffb07c; /* El borde naranja sutil */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    font-family: sans-serif;
-    font-size: 14px;
-    z-index: 9999; /* Para que quede siempre encima de todo */
-    line-height: 1.4;
 }
 
-.cartel-sesion p {
-    margin: 0;
-}
-
-.cartel-sesion strong {
-    color: #ffb07c; /* El rol resaltado en naranja */
-}
-
-.cartel-sesion span {
-    display: block;
-    font-size: 12px;
-    color: #a0aec0; /* Gris claro para el nombre de usuario */
-    margin-top: 2px;
-}
-/* Ajustes de control para evitar superposiciones en el menú */
-header .menu ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-wrap: wrap; /* Evita que los textos colisionen en pantallas chicas */
-}
-header .menu ul li {
-    margin: 0 15px;
-}
-
-/* Contenedor flotante fijo en la esquina inferior derecha */
-.widget-rol-flotante {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #3b4664;
-    color: #ffffff;
-    padding: 10px 15px;
-    border-radius: 6px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    font-family: Arial, sans-serif;
-    font-size: 0.9em;
-    z-index: 1000;
-    border: 1px solid #ffb07c;
-}
-
-/* --- ESTILOS PARA LA PÁGINA DE ERROR --- */
-
+/* --- PÁGINA DE ERROR --- */
 .error-container {
     text-align: center;
-    background-color: #2e384d; /* Azul oscuro consistente con el proyecto */
+    background-color: #2e384d;
     padding: 40px 50px;
     border-radius: 8px;
-    border: 1px solid #ffb07c; /* Detalle naranja de advertencia */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    border: 1px solid #ffb07c;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
     max-width: 450px;
     width: 90%;
-    /* Centrado absoluto en pantalla en caso de que su padre no use Flexbox */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -199,28 +200,14 @@ header .menu ul li {
     margin: 0 0 10px 0;
     font-size: 28px;
     font-weight: 600;
-    letter-spacing: 0.5px;
     color: #ffffff;
 }
 
 .error-container p {
-    color: #a0aec0; /* Gris claro secundario */
+    color: #a0aec0;
     font-size: 16px;
     line-height: 1.5;
     margin: 0 0 30px 0;
-    word-wrap: break-word;
-}
-
-.btn-volver {
-    display: inline-block;
-    background-color: #ffb07c;
-    color: #1a202c; /* Texto oscuro para buen contraste */
-    text-decoration: none;
-    padding: 12px 24px;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 15px;
-    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .btn-volver:hover {
@@ -228,6 +215,117 @@ header .menu ul li {
     transform: translateY(-1px);
 }
 
-.btn-volver:active {
-    transform: translateY(0);
+/* --- PÁGINA DE ASIGNACIÓN --- */
+.asignacion-page {
+    max-width: 750px;
+    margin: 40px auto;
+    padding: 25px;
+    text-align: center;
+    background-color: #3b4664;
+    border-radius: 8px;
+    border: 1px solid #ffb07c;
+    color: white;
+}
+
+.icon-success {
+    font-size: 3em;
+    color: #ffb07c;
+    margin-bottom: 15px;
+}
+
+.asignacion-page h2 { color: #ffb07c; margin-bottom: 10px; }
+.asignacion-page p { color: #ccc; line-height: 1.6; margin-bottom: 25px; }
+
+.resumen h3 {
+    color: #ffb07c;
+    border-bottom: 1px solid #4a577d;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 6px;
+    overflow: hidden;
+    color: #fff;
+}
+
+.tabla th {
+    background-color: #4a577d;
+    color: #ffb07c;
+    padding: 12px;
+}
+
+.tabla td {
+    padding: 12px;
+    border-bottom: 1px solid #3b4664;
+}
+
+.tabla td strong { color: #ffb07c; }
+
+.mensaje-vacio {
+    color: #aaa;
+    font-style: italic;
+    text-align: center;
+    padding: 15px;
+    background-color: #2c3550;
+    border-radius: 6px;
+}
+
+/* --- BANDEJA --- */
+.container-bandeja {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header-bandeja {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #3e4b5b;
+    padding-bottom: 15px;
+}
+
+.header-bandeja h1 { color: #ffb07c; margin: 0; }
+
+.user-badge {
+    background-color: #2e384d;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: 1px solid #ffb07c;
+}
+
+.section-trabajos { margin-bottom: 40px; }
+
+.pendientes-title {
+    background-color: #e67e22;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+.evaluados-title {
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+.tabla-contenedor {
+    overflow-x: auto;
+    background-color: #2e384d;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }

@@ -28,33 +28,18 @@ def inicio():
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login(): # Esto es una vista
-    print(f"\n[MÉTODO DETECTADO]: Entró a la vista login por el método {request.method}")
     if request.method == 'POST':
         correo_ingresado = request.form.get('correo')
         clave_ingresada = request.form.get('clave')
         evaluador = Evaluador.query.filter_by(correo=correo_ingresado).first()
         organizador = Organizador.query.filter_by(correo=correo_ingresado).first()
-        # --- 🔍 AGREGA ESTO ACÁ PARA INSPECCIONAR A CARLOS ---
-        if evaluador:
-            print("\n=== 🕵️ INSPECCIONANDO LAS COLUMNAS DE EVALUADOR ===")
-            # Esto imprimirá en la consola un diccionario con los nombres de campos reales en la DB
-            print("Campos reales de este objeto:", evaluador.__dict__)
-            print("==================================================\n")
-        # --- 🔍 PRINT DE DIAGNÓSTICO CRÍTICO ---
-        print("\n=== ANALIZANDO DATOS INGRESADOS ===")
-        print(f"Texto escrito en formulario - Correo: '{correo_ingresado}' | Clave: '{clave_ingresada}'")
-        print(f"¿Se encontró al evaluador en la DB?: {'SÍ' if evaluador else 'NO'}")
-        print("===================================\n")
-        
+
         if evaluador and check_password_hash(evaluador.get_clave(), clave_ingresada):
             session['rol'] = 'evaluador'
             session['correo'] = evaluador.get_correo()
             session['nombre'] = evaluador.get_nombre()
             session['apellido'] = evaluador.get_apellido()
             session['id'] = evaluador.id
-            print("\n=== ¡LOGIN DE EVALUADOR DETECTADO! ===")
-            print("Guardando en sesión el ID ->", evaluador.id)
-            print("======================================\n")
             flash(f'¡Bienvenido {evaluador.get_nombre()}!', 'exito')
             resultado = redirect(url_for('bandeja'))
         elif organizador and check_password_hash(organizador.get_clave(), clave_ingresada):
@@ -159,18 +144,9 @@ def bandeja():
     if session.get('rol') == 'Organizador':
         resultado = render_template('error.html')
     else:
-        # --- 🧪 METE ESTOS PRINTS DE DIAGNÓSTICO ---
-        print("\n=== VERIFICANDO DATOS DEL EVALUADOR ===")
-        print("1. ID guardado en sesión:", session.get('id'))
-        print("2. Rol guardado en sesión:", session.get('rol'))
-        print("========================================\n") 
-        
         pendientes = gestor.Pendientes(session.get('id'))
         evaluadas_lista = gestor.Evaluadas(session.get('id'))
         
-        print(f"-> Cantidad devuelta por el gestor: {len(pendientes)} pendientes")
-        
-        # 💡 CORREGIDO: Pasamos 'evaluadas=evaluadas_lista' para que coincida con tu HTML
         resultado = render_template('bandeja.html', pendientes=pendientes, evaluadas=evaluadas_lista)
     return resultado
 
