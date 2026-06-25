@@ -35,3 +35,9 @@ class Asignacion(db.Model):
         else:
             return self.fecha_evaluacion
         
+    def fue_evaluada(self):
+        resultado = None
+        if self.valoracion is not None:
+            resultado=self.valoracion
+        return resultado
+        

@@ -54,14 +54,7 @@
     {% if session.get('rol') %}
     <div class="cartel-sesion">
         <p>Conectado como: <strong>{{ session.get('rol') | upper }}</strong></p>
-        <span>
-            Usuario: 
-            {% if session.get('nombre') %}
-                {{ session.get('nombre') }} {{ session.get('apellido') }}
-            {% else %}
-                Usuario Registrado
-            {% endif %}
-        </span>
+        <span>Usuario: {{ session.get('nombre') }} {{ session.get('apellido') | default('', true) }}</span>
     </div>
     {% endif %}
 </body>
