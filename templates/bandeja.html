@@ -3,39 +3,37 @@
 {% block title %}Bandeja de Trabajos{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 1100px; margin: 40px auto; padding: 0 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+<div class="container-bandeja">
     
-    <div class="header-bandeja" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #3e4b5b; padding-bottom: 15px;">
-        <h1 style="color: #ffb07c; margin: 0;">Bandeja de Evaluación</h1>
-        <span class="user-badge" style="background-color: #2e384d; color: #ffffff; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; border: 1px solid #ffb07c;">
+    <div class="header-bandeja">
+        <h1>Bandeja de Evaluación</h1>
+        <span class="user-badge">
             Evaluador: {{ session.get('nombre') }} {{ session.get('apellido') }}
         </span>
     </div>
-    <div class="section-trabajos" style="margin-bottom: 40px;">
-        <h2 style="color: #ffffff; background-color: #e67e22; padding: 10px 15px; border-radius: 4px; font-size: 1.3rem; margin-bottom: 15px;">
+
+    <div class="section-trabajos">
+        <h2 class="pendientes-title">
             📥 Trabajos Pendientes de Evaluación ({{ pendientes|length }})
         </h2>
         
         {% if pendientes %}
-            <div class="tabla-contenedor" style="overflow-x: auto; background-color: #2e384d; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
-                <table style="width: 100%; border-collapse: collapse; text-align: left; color: #ffffff;">
+            <div class="tabla-contenedor">
+                <table class="tabla-trabajos">
                     <thead>
-                        <tr style="background-color: #1a202c; border-bottom: 2px solid #3e4b5b;">
-                            <th style="padding: 12px 15px;">Título del Trabajo</th>
-                            <th style="padding: 12px 15px;">Categoría</th>
-                            <th style="padding: 12px 15px; text-align: center;">Acciones</th>
+                        <tr>
+                            <th>Título del Trabajo</th>
+                            <th>Categoría</th>
+                            <th class="acciones-col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for asignacion in pendientes %}
-                        <tr style="border-bottom: 1px solid #3e4b5b;">
-                            <td style="padding: 15px; font-weight: 500;">{{ asignacion.trabajo.titulo }}</td>
-                            <td style="padding: 15px; color: #cbd5e0;">{{ asignacion.trabajo.area }}</td>
-                            
-                            <td style="padding: 15px; text-align: center;">
-                                <a href="#" style="background-color: #ffb07c; color: #1a202c; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.9rem; display: inline-block;">
-                                    Evaluar
-                                </a>
+                        <tr>
+                            <td>{{ asignacion.trabajo.titulo }}</td>
+                            <td>{{ asignacion.trabajo.area }}</td>
+                            <td class="acciones-col">
+                                <a href="#" class="btn-evaluar">Evaluar</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -43,36 +41,34 @@
                 </table>
             </div>
         {% else %}
-            <p style="color: #a0aec0; font-style: italic; background-color: #2e384d; padding: 15px; border-radius: 6px; border-left: 4px solid #e67e22;">
+            <p class="mensaje-vacio-pendientes">
                 No tienes trabajos pendientes asignados en este momento.
             </p>
         {% endif %}
     </div>
 
     <div class="section-trabajos">
-        <h2 style="color: #ffffff; background-color: #2c3e50; padding: 10px 15px; border-radius: 4px; font-size: 1.3rem; margin-bottom: 15px;">
+        <h2 class="evaluados-title">
             ✅ Trabajos Evaluados ({{ evaluadas|length }})
         </h2>
         
         {% if evaluadas %}
-            <div class="tabla-contenedor" style="overflow-x: auto; background-color: #2e384d; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
-                <table style="width: 100%; border-collapse: collapse; text-align: left; color: #ffffff;">
+            <div class="tabla-contenedor">
+                <table class="tabla-trabajos">
                     <thead>
-                        <tr style="background-color: #1a202c; border-bottom: 2px solid #3e4b5b;">
-                            <th style="padding: 12px 15px;">Título del Trabajo</th>
-                            <th style="padding: 12px 15px;">Categoría</th>
-                            <th style="padding: 12px 15px; text-align: center;">Estado</th>
+                        <tr>
+                            <th>Título del Trabajo</th>
+                            <th>Categoría</th>
+                            <th class="acciones-col">Estado</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for trabajo in evaluadas %}
-                            <tr style="border-bottom: 1px solid #3e4b5b; opacity: 0.85;">
-                                <td style="padding: 15px;">{{ trabajo.get_titulo() }}</td>
-                                <td style="padding: 15px; color: #cbd5e0;">{{ trabajo.get_area() }}</td>
-                                <td style="padding: 15px; text-align: center;">
-                                    <span style="background-color: #27ae60; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; font-weight: bold;">
-                                        Evaluado
-                                    </span>
+                            <tr class="evaluado-row">
+                                <td>{{ trabajo.get_titulo() }}</td>
+                                <td>{{ trabajo.get_area() }}</td>
+                                <td class="acciones-col">
+                                    <span class="estado-evaluado">Evaluado</span>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -80,7 +76,7 @@
                 </table>
             </div>
         {% else %}
-            <p style="color: #a0aec0; font-style: italic; background-color: #2e384d; padding: 15px; border-radius: 6px; border-left: 4px solid #2c3e50;">
+            <p class="mensaje-vacio-evaluados">
                 Aún no has calificado ningún trabajo.
             </p>
         {% endif %}
