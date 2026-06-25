@@ -6,11 +6,7 @@
     <p>Has iniciado sesión como <strong>{{ datos['rol'] }}</strong>.</p>
     <p>Tu correo registrado es: {{ datos['email'] }}</p>
     <p>Hora de ingreso: {{ hora }}:00 hs</p>
-
-    {% if datos['rol'] == 'evaluador' %}
-        <a class="btn-primary" href="{{ url_for('bandeja') }}">Ir a la bandeja de evaluación</a>
-    {% elif datos['rol'] == 'organizador' %}
-        <a class="btn-primary" href="{{ url_for('asignar_trabajos') }}">Gestionar trabajos</a>
-    {% endif %}
+    
+    <a class="btn-primary" href="{{ url_for('inicio') }}">Ir al Inicio</a>
 </section>
 {% endblock %}

@@ -41,9 +41,7 @@ class GestorDB:
         trabajos = Trabajo.query.filter_by(estado="Pendiente").all()
         detalles_asignaciones = []
         for trabajo in trabajos:
-            # Limpiamos el código de área quitando espacios
             area_trabajo = trabajo.get_area().strip()
-            # Buscamos evaluadores cuyos primeros caracteres coincidan con el área
             evaluadores = Evaluador.query.filter(Evaluador.area.like(f"{area_trabajo}%")).all()
             count = 0
             i = 0

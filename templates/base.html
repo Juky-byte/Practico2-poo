@@ -52,11 +52,5 @@
         <p>&copy; Congreso de Ecología - 2026</p>
     </footer>
 
-    {% if session.get('rol') %}
-    <div class="cartel-sesion">
-        <p>Conectado como: <strong>{{ session.get('rol') | upper }}</strong></p>
-        <span>Usuario: {{ session.get('nombre') }} {{ session.get('apellido') | default('', true) }}</span>
-    </div>
-    {% endif %}
 </body>
 </html>
