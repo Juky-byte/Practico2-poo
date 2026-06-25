@@ -1,37 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Login - ETI{% endblock %}
 {% block content %}
-<section class="login-page">
+<section class="form-page">
     <h2>Formulario de Inicio de Sesión</h2>
     <form action="{{ url_for('login') }}" method="POST">
-        <br>
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
-            <br></br>
-            <label for="apellido">Apellido:</label>
-            <input type="text" id="apellido" name="apellido" placeholder="Apellido" required>
-            <br></br>
+        <div class="form-group">
+            <label for="correo">Correo Electrónico:</label>
+            <input type="email" id="correo" name="correo" class="input-text" placeholder="ejemplo@correo.com" required>
         </div>
-        <br>
-        <div>
-            <label for = "email">Correo Electrónico:</label>
-            <input type = "email" id = "correo" name="correo" placeholder = "Gmail" required>
-        </div>
-        <br>
-        <div>
+        <div class="form-group">
             <label for="clave">Contraseña:</label>
-            <input type="password" id="clave" name="clave" placeholder="Contraseña" required>
+            <input type="password" id="clave" name="clave" class="input-text" placeholder="Contraseña" required>
         </div>
-        <br>
-        <div>
+        <div class="form-group">
             <label for="rol">Iniciar sesión como:</label>
-            <select id="rol" name="rol" required>
+            <select id="rol" name="rol" class="input-select" required>
                 <option value="" disabled selected>Selecciona tu rol...</option>
                 <option value="evaluador">Evaluador</option>
                 <option value="organizador">Organizador</option>
             </select>
         </div>
-        <br>
         <button type="submit" class="btn-primary">Ingresar</button>
     </form>
 </section>

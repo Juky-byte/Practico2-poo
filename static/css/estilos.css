@@ -9,6 +9,9 @@ body {
     margin: 0;
     padding: 0;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 header {
@@ -22,11 +25,27 @@ header h1 {
     color: #f9b17a;
 }
 
+section {
+    margin-top: 50px;   
+    padding: 20px;      
+}
+
+main {
+    flex: 1;
+}
 footer {
     background: #424769;
     padding: 15px;
-    margin-top: 40px;
+    margin-top: auto;
+    text-align: center;
     color: #ffffff;
+}
+
+/* --- Inicio --- */
+.contenedor {
+    max-width: 900px;
+    margin: 80px auto;
+    padding: 20px;
 }
 
 /* --- MENÚ --- */
@@ -59,7 +78,11 @@ footer {
 }
 
 /* --- BOTONES --- */
-.btn {
+.btn,
+.btn-primary,
+.btn-asignar,
+.btn-bandeja,
+.btn-volver {
     display: inline-block;
     padding: 10px 20px;
     border-radius: 4px;
@@ -68,12 +91,27 @@ footer {
     transition: background 0.3s ease;
 }
 
+/* Variantes */
 .btn-primary { background: #f9b17a; color: #2d3250; }
 .btn-primary:hover { background: #ffffff; }
 
 .btn-asignar { background-color: #ffb07c; color: #222; }
 .btn-bandeja { background-color: #4a90e2; color: #fff; }
 .btn-volver { background-color: #ffb07c; color: #222; }
+.btn-volver:hover { background-color: #e09b67; }
+.btn-evaluar {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: #4a90e2; /* azul */
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+.btn-evaluar:hover {
+    background-color: #357ab8;
+}
 
 /* --- FORMULARIOS --- */
 .form-page {
@@ -96,7 +134,6 @@ footer {
     font-weight: 600;
     color: #f9b17a;
 }
-
 .form-group input,
 .form-group textarea,
 .form-group select {

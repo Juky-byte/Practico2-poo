@@ -17,17 +17,18 @@ db = SQLAlchemy(app)
 # se crea el gestor de la app
 from controllers.gestor import GestorDB
 gestor = GestorDB()
+
+# importo los modelos aca para evitar la importacion circular
 from models.class_evaluador import Evaluador
 from models.class_organizador import Organizador
-from models.class_asignacion import Asignacion
-from models.class_trabajo import Trabajo
 
 @app.route('/')
 def inicio():
     return render_template('index.html')
 
+# ------------------------------ Login ------------------------------
 @app.route('/login', methods = ['GET', 'POST'])
-def login(): # Esto es una vista
+def login():
     if request.method == 'POST':
         correo_ingresado = request.form.get('correo')
         clave_ingresada = request.form.get('clave')
@@ -41,7 +42,7 @@ def login(): # Esto es una vista
             session['apellido'] = evaluador.get_apellido()
             session['id'] = evaluador.id
             flash(f'¡Bienvenido {evaluador.get_nombre()}!', 'exito')
-            resultado = redirect(url_for('bandeja'))
+            resultado = redirect(url_for('inicio'))
         elif organizador and check_password_hash(organizador.get_clave(), clave_ingresada):
             session['rol'] = 'organizador'
             session['correo'] = organizador.get_correo()
@@ -49,11 +50,11 @@ def login(): # Esto es una vista
             session['apellido'] = organizador.get_apellido()
             session['id'] = organizador.id
             flash(f'¡Bienvenido {organizador.get_nombre()}!', 'exito')
-            resultado = redirect(url_for('asignar_trabajos'))   
+            resultado = redirect(url_for('inicio'))
         else:
             flash('Correo o contraseña incorrectos', 'error')
             resultado = redirect(url_for('login'))
-    else:
+    else: # entra por GET
         resultado = render_template('login.html')  
     return resultado
 
@@ -65,7 +66,7 @@ def logout():
 
 @app.route('/limpiar')
 def limpiar_sesion():
-    session.clear()  # Borra el rol y el ID viejo por completo
+    session.clear()
     print("\n=== ¡SESIÓN BORRADA EN EL SERVIDOR! ===\n")
     return "Sesión limpia. Ahora ve a /login e intenta ingresar de nuevo."
 
@@ -82,9 +83,9 @@ def bienvenida():
         retorno = redirect(url_for('inicio'))
     else:
         retorno = render_template('error.html')
-    return retorno # Redirige al inicio o home
+    return retorno # Redirige al inicio
 
-#Funcionalidad 1
+# ------------------------------ Funcionalidad 1 ------------------------------
 @app.route("/enviar_trabajo", methods = ['GET', 'POST'])
 def enviar_trabajo():
     resultado = ""
@@ -107,7 +108,7 @@ def enviar_trabajo():
         resultado = render_template('enviar_trabajo.html')
     return resultado
 
-# Funcionalidad 2
+# ------------------------------ Funcionalidad 2 ------------------------------
 @app.route("/consultar_trabajo",methods = ['GET', 'POST'])
 def consultar_trabajo():
     resultado = ''
@@ -131,14 +132,22 @@ def consultar_trabajo():
         resultado = render_template("consultar_trabajo.html", trabajo_1 = None, mensaje = None)
     return resultado
 
-# Funcionalidad 3
-@app.route("/asignar_trabajos")
-def asignar_trabajos():
-    asignaciones = gestor.asignar_trabajos()
-    retorno = render_template('asignar_trabajo.html', asignaciones = asignaciones)
-    return retorno
+# ------------------------------ Funcionalidad 3 ------------------------------
 
-# Funcionalidad 5
+@app.route("/asignar_trabajos", methods=["GET", "POST"])
+def asignar_trabajos():
+    asignaciones = None
+    if request.method == "POST":
+        asignaciones = gestor.asignar_trabajos()
+
+        if not asignaciones:  
+            flash("No hay trabajos pendientes para asignar", "error")
+        else:
+            flash("Asignación realizada con éxito", "exito")
+
+    retorno = render_template("asignar_trabajo.html", asignaciones=asignaciones)
+    return retorno
+# ------------------------------ Funcionalidad 5 ------------------------------
 @app.route('/bandeja')
 def bandeja():
     if session.get('rol') == 'Organizador':
@@ -150,7 +159,8 @@ def bandeja():
         resultado = render_template('bandeja.html', pendientes=pendientes, evaluadas=evaluadas_lista)
     return resultado
 
+# ------------------------------ Main ------------------------------
 if __name__ == '__main__':
-    with app.app_context(): # le digo a python que actúe como si la app estuviera corriendo(realmente no lo hace)
+    with app.app_context(): 
         gestor.crearDB()
-        app.run(debug = True,port = 5000) #Se ejecuta la aplicación, "debug" por defecto es False, puerto 5000 (se puede modificar)
+        app.run(debug = True,port = 5000)

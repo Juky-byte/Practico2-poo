@@ -1,23 +1,22 @@
 {% extends "base.html" %}
-
 {% block title %}Asignación de Trabajos - ETI{% endblock %}
-
 {% block content %}
 <section class="asignacion-page">
+    <div class="icon-success">⚙️</div>
     
-    <div class="icon-success">
-        ⚙️
-    </div>
-    
-    <h2>Proceso de Asignación Finalizado</h2>
+    <h2>Asignación de Trabajos</h2>
     
     <p>
-        La aplicación ejecutó con éxito el algoritmo de asignación automática de evaluadores para los trabajos en estado <strong>Pendiente</strong>.
+        Presiona el botón para ejecutar el algoritmo de asignación de evaluadores
+        para los trabajos en estado <strong>Pendiente</strong>.
     </p>
+
+    <form method="POST" action="{{ url_for('asignar_trabajos') }}">
+        <button type="submit" class="btn-primary">Ejecutar Asignación</button>
+    </form>
 
     <div class="resumen">
         <h3>Resumen de Emparejamientos Realizados</h3>
-        
         {% if asignaciones %}
             <table class="tabla-asignaciones">
                 <thead>
@@ -47,10 +46,7 @@
     <hr>
 
     <div class="acciones">
-        <a href="{{ url_for('inicio') }}" class="btn btn-volver">
-            Volver al Inicio
-        </a>
+        <a href="{{ url_for('inicio') }}" class="btn-volver">Volver al Inicio</a>
     </div>
-
 </section>
 {% endblock %}
