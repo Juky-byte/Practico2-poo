@@ -19,6 +19,7 @@ class Config:
         "sqlite:///" + os.path.join(INSTANCE_DIR, "datos.sqlite3")
     )
 
+    # Configuracion opcional (apagador de sensores internos)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Carpeta de uploads

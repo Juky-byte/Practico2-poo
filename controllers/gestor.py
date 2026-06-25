@@ -40,16 +40,11 @@ class GestorDB:
     def asignar_trabajos(self):
         trabajos = Trabajo.query.filter_by(estado="Pendiente").all()
         detalles_asignaciones = []
-        print(f"\n=== [DIAGNÓSTICO] Cantidad de trabajos pendientes encontrados: {len(trabajos)} ===")
         for trabajo in trabajos:
             # Limpiamos el código de área quitando espacios
             area_trabajo = trabajo.get_area().strip()
-            print(f"\n-> Procesando Trabajo ID {trabajo.get_id()}: '{trabajo.get_titulo()}' | Área: '{area_trabajo}'")
             # Buscamos evaluadores cuyos primeros caracteres coincidan con el área
             evaluadores = Evaluador.query.filter(Evaluador.area.like(f"{area_trabajo}%")).all()
-            print(f"   Evaluadores encontrados en la base de datos para esta área: {len(evaluadores)}")
-            # Ordenamos consultando la base de datos limpiamente
-            evaluadores = sorted(evaluadores, key=lambda e: db.session.query(Asignacion).filter_by(evaluador_id=e.get_id()).count())
             count = 0
             i = 0
             hubo_cambio_trabajo = False
@@ -66,7 +61,6 @@ class GestorDB:
                     if lista_asig[j].get_evaluador_id() == evaluador_actual.get_id():
                         ya_asignado = True
                     j += 1
-                print(f"   - Evaluador: {evaluador_actual.get_nombre()} {evaluador_actual.get_apellido()} | Cupo Actual: {cant_actual}/{evaluador_actual.get_max_trabajos()} (Tiene cupo: {tiene_cupo}) | Ya asignado antes: {ya_asignado}") 
                 if tiene_cupo and not ya_asignado:
                     nueva_asignacion = Asignacion(trabajo_id=trabajo.get_id(), evaluador_id=evaluador_actual.get_id())
                     db.session.add(nueva_asignacion)
@@ -77,12 +71,10 @@ class GestorDB:
                     })
                     count += 1
                     hubo_cambio_trabajo = True
-                    print(f"     [¡ASIGNADO CORECTAMENTE!]")
                 i += 1
             if hubo_cambio_trabajo:
                 trabajo.set_estado("Asignado")   
         db.session.commit()
-        print(f"\n=== [FIN DIAGNÓSTICO] Asignaciones totales creadas en este clic: {len(detalles_asignaciones)} ===\n")
         return detalles_asignaciones
 
     def Evaluadas(self, evaluador_id):
