@@ -87,7 +87,8 @@ Practico2-poo/
 ├── requirements.txt    # Dependencias
 └── .gitignore          # Archivos ignorados
 
+
 👥 Autores:
-Gabriel Luna
-Julian Leal
+- Gabriel Luna
+- Julian Leal
 
